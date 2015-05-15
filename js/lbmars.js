@@ -24,13 +24,13 @@ function autoDeal(){
 	  $(item).val("123@123.com");
 	});
 	$("[name*='fullName']").each(function(idx, item){
-	  $(item).val(cnNames[idx/cnNames.size()]);
+	  $(item).val(cnNames[idx%cnNames.length]);
 	});
 	$("[name*='firstName']").each(function(idx, item){
-	  $(item).val(enNames1[idx/enNames1.size()]);
+	  $(item).val(enNames1[idx%enNames1.length]);
 	});
 	$("[name*='lastName']").each(function(idx, item){
-	  $(item).val(enNames2[idx/enNames2.size()]);
+	  $(item).val(enNames2[idx%enNames2.length]);
 	});
 	$("[name$='idNo']").each(function(idx, item){
 	  $(item).val(342401198012121212+idx/10);
