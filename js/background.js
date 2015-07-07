@@ -15,6 +15,9 @@ function initActions() {
     $("#_tsHello")[0].addEventListener("click", function (e) {
         chrome.tabs.executeScript(null, {code: "hello('123');", allFrames: true});
     });
+    $("#_tsAutoClose")[0].addEventListener("click", function (e) {
+        chrome.tabs.executeScript(null, {code: "autoClose();", allFrames: true});
+    });
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
