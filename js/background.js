@@ -18,6 +18,12 @@ function initActions() {
     $("#_tsAutoClose")[0].addEventListener("click", function (e) {
         chrome.tabs.executeScript(null, {code: "autoClose();", allFrames: true});
     });
+    $("#_lvmamaAddBGDiv")[0].addEventListener("click", function (e) {
+        chrome.tabs.executeScript(null, {code: "lvmamaAddBGDiv();", allFrames: true});
+    });
+    $("#_calcWorkTime")[0].addEventListener("click", function (e) {
+        chrome.tabs.executeScript(null, {code: "calcWorkTime();", allFrames: true});
+    });
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {

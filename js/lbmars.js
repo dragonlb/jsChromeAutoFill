@@ -1,5 +1,5 @@
 $('body').on("click", function(){
-		console.log("Hello Lb.");
+		//console.log("Hello Lb.");
 });
 function hello(name){
 	var vName = "";
@@ -58,4 +58,106 @@ function autoClose(){
 		$(item).hide();
 	});
 	//document.getElementById("cs_right_bottom").style.display="none";
+}
+
+function lvmamaAddBGDiv(){
+	var productIdDiv = $("<input type='text' id='lb_productId' value='' >").blur(function(){$("#aimBtn").attr("data", $("#lb_productId").val());});
+	var startDistrictId = $("<input type='text' id='lb_startDistrictId' value='9' >").blur(function(){$("#aimBtn").attr("startdistrictid", $("#lb_startDistrictId").val());});
+	var specDate = $("<input type='text' id='lb_specDate' value='2015-10-17' >").blur(function(){$("#aimBtn").attr("groupdate", $("#lb_specDate").val());});
+	var categoryId = $("<input type='text' id='lb_categoryId' value='18' >").blur(function(){$("#aimBtn").attr("categoryid", $("#lb_categoryId").val());});;
+	var button = "<a data='397947' startdistrictid='9' categoryid='18' groupdate='2015-10-17' id='aimBtn' class='btn btn_cc1 xzcpBtn'  onclick='javascript:xzcpBtnClick(this)'>选择</a>";
+	var newDiv = $("<div></div>").append("产品ID").append(productIdDiv)
+		.append("出发地ID：").append(startDistrictId)
+		.append("日期：").append(specDate)
+		.append("品类ID:").append(categoryId)
+		.append(button);
+	$("#result").append(newDiv);
+}
+
+function lvmamaDoSelect(dom){
+	var jDom = $(dom);
+	jDom.attr("data", $("#lb_productId").val());
+	jDom.attr("startdistrictid", $("#lb_startDistrictId").val());
+	jDom.attr("groupdate", $("#lb_specDate").val());
+	jDom.attr("categoryid", $("#lb_categoryId").val());
+	xzcpBtnClick(dom);
+}
+
+function calcWorkTime(){
+	var nowDate = new Date();
+	var theMonth = window.prompt("请输入工时月份",nowDate.getMonth()+1);
+	try{
+		var fdStart = new Date(nowDate.setMonth(theMonth-2));
+		fdStart = new Date(fdStart.setDate(26));
+		fdStart = new Date(fdStart.setHours(0));
+		fdStart = new Date(fdStart.setMinutes(0));
+		fdStart = new Date(fdStart.setSeconds(0));
+		console.log(fdStart);
+		var fdEnd = new Date(fdStart);
+		fdEnd = new Date(fdEnd.setMonth(fdEnd.getMonth()+1));
+		var url = "/km/review/km_review_card_record/kmReviewCardRecord.do";
+		var pData = {
+			method: 'data',
+			fdStart: fdStart.getFullYear()+"-"+(fdStart.getMonth()+1)+"-"+fdStart.getDate()+' 00:00',
+			fdEnd: fdEnd.getFullYear()+"-"+(fdEnd.getMonth()+1)+"-"+fdEnd.getDate()+' 00:00'
+		};
+		console.log(pData);
+		$.getJSON(url, pData, function(jsonData){
+			var companyAll = 0, actualAll = 0;
+			var workDays = dealWithJson(jsonData);
+			for(var oneDay = new Date(fdStart),i=0;oneDay<fdEnd; oneDay=new Date(oneDay.setDate(oneDay.getDate()+1))){
+				if(oneDay.getDay()==0 || oneDay.getDay()==6){
+					continue;
+				}
+				var dayKey = oneDay.getFullYear()+"-"+(oneDay.getMonth()+1)+"-"+oneDay.getDate();
+				var actualMinutes = 0;
+				var actualTimes = "";
+				if(workDays[dayKey]){
+					actualMinutes = workDays[dayKey].stepMinutes
+					actualTimes = workDays[dayKey].title;
+				}
+				companyAll += 480;
+				actualAll += actualMinutes;
+				console.log((++i)+"\t"+"周"+oneDay.getDay()+"\t"+dayKey+"\t应工作 480 分钟，实际工作 "+actualMinutes+" 分钟，差异分钟数:\t\t[ "+(actualMinutes-480)+" ]\t\t"+actualTimes);
+			}
+			console.log("------------------- 统计 -------------------");
+			console.log("["+pData.fdStart+" 至 "+pData.fdEnd+"]区间应工作 "+companyAll+" 分钟，实际工作 "+actualAll+" 分钟，差异分钟数：[ "+(actualAll-companyAll)+" ],即 [ "+((actualAll-companyAll)/60)+" 小时 "+((actualAll-companyAll)%60)+" 分钟 ]");
+		});
+	}catch(e){
+		alert("输入的 JSON 不合法!"+e);
+	}
+}
+
+function dealWithJson(workJson){
+	//console.log(workJsonSt);
+	//var workJson = eval(workJsonSt);
+	var retJson = {};
+	for(var i=0;i<workJson.length;i++){
+		var oneDay = workJson[i];
+		if( !oneDay || !oneDay.title || !oneDay.start ){
+			continue;
+		}
+		var wkTimes = oneDay.title.split("~");
+		if(!wkTimes || wkTimes.length!=2){
+			continue;
+		}
+		oneDay.from = new Date(oneDay.start+" "+wkTimes[0]);
+		oneDay.to = new Date(oneDay.start+" "+wkTimes[1]);
+		if(oneDay.to-oneDay.from<0){
+			oneDay.to = new Date(oneDay.to.setDate(oneDay.to.getDate()+1));
+		}
+		oneDay.stepMinutes = (oneDay.to - oneDay.from)/(1000*60);
+		if(new Date(oneDay.start+" 12:00:00")>oneDay.from){
+			oneDay.stepMinutes -= 60;
+		}
+		else if(new Date(oneDay.start+" 13:00:00")>oneDay.from){
+			oneDay.stepMinutes -= (new Date(oneDay.start+" 13:00:00")-oneDay.from);
+		}
+		if(oneDay.from.getDay()==0 || oneDay.from.getDay()==6){
+			continue;
+		}
+		var dayKey = oneDay.from.getFullYear()+"-"+(oneDay.from.getMonth()+1)+"-"+oneDay.from.getDate();
+		retJson[''+dayKey+''] = oneDay;
+	}
+	return retJson;
 }
