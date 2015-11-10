@@ -8,6 +8,12 @@
     "tabs",
     "http://*/*",
     "https://*/*",
+    "chrome-devtools://*/*",
+    "chrome-extension://*/*",
+    "ftp://",
+    "file://",
+    "webRequest",
+    "*://*.google.com/",
     "background",
     "notifications"
   ],

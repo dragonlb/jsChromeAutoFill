@@ -84,6 +84,7 @@ function lvmamaDoSelect(dom){
 }
 
 function calcWorkTime(){
+	var weekDays = ['天', '一', '二', '三', '四', '五', '六'];
 	var nowDate = new Date();
 	var theMonth = window.prompt("请输入工时月份",nowDate.getMonth()+1);
 	try{
@@ -105,7 +106,7 @@ function calcWorkTime(){
 		$.getJSON(url, pData, function(jsonData){
 			var companyAll = 0, actualAll = 0;
 			var workDays = dealWithJson(jsonData);
-			for(var oneDay = new Date(fdStart),i=0;oneDay<fdEnd; oneDay=new Date(oneDay.setDate(oneDay.getDate()+1))){
+			for(var oneDay = new Date(fdStart),dayOfMonth=0;oneDay<fdEnd; oneDay=new Date(oneDay.setDate(oneDay.getDate()+1))){
 				if(oneDay.getDay()==0 || oneDay.getDay()==6){
 					continue;
 				}
@@ -118,10 +119,21 @@ function calcWorkTime(){
 				}
 				companyAll += 480;
 				actualAll += actualMinutes;
-				console.log((++i)+"\t"+"周"+oneDay.getDay()+"\t"+dayKey+"\t应工作 480 分钟，实际工作 "+actualMinutes+" 分钟，差异分钟数:\t\t[ "+(actualMinutes-480)+" ]\t\t"+actualTimes);
+				var actualMinutesSt = actualMinutes.toString();
+				for(var i=actualMinutesSt.length;i<=3;i++){
+					actualMinutesSt = " "+actualMinutesSt;
+				}
+				var lessMinutesSt = (actualMinutes-480).toString();
+				for(var i=lessMinutesSt.length;i<=4;i++){
+					lessMinutesSt = " "+lessMinutesSt;
+				}
+				console.log((++dayOfMonth)+"\t"+"周"+weekDays[oneDay.getDay()]+"\t\t"+dayKey+"\t应工作 480 分钟，实际工作 "+actualMinutesSt+"\t分钟，差异分钟数:\t[ "+lessMinutesSt+" ]\t\t"+actualTimes);
 			}
-			console.log("------------------- 统计 -------------------");
-			console.log("["+pData.fdStart+" 至 "+pData.fdEnd+"]区间应工作 "+companyAll+" 分钟，实际工作 "+actualAll+" 分钟，差异分钟数：[ "+(actualAll-companyAll)+" ],即 [ "+((actualAll-companyAll)/60)+" 小时 "+((actualAll-companyAll)%60)+" 分钟 ]");
+			console.log("-------------------------------------- 统计 --------------------------------------");
+			var lessOfMinutes = actualAll-companyAll;
+			var lessOfHours = parseInt(lessOfMinutes/60)%8;
+			var lessOfDays = parseInt(lessOfMinutes/480);
+			console.log("["+pData.fdStart+" 至 "+pData.fdEnd+"]区间应工作 "+companyAll+" 分钟，实际工作 "+actualAll+" 分钟，差异分钟数：[ "+(actualAll-companyAll)+" ],即 [  "+lessOfDays+" 天, "+lessOfHours+" 小时, "+(lessOfMinutes%60)+" 分钟 ]");
 		});
 	}catch(e){
 		alert("输入的 JSON 不合法!"+e);
@@ -129,8 +141,6 @@ function calcWorkTime(){
 }
 
 function dealWithJson(workJson){
-	//console.log(workJsonSt);
-	//var workJson = eval(workJsonSt);
 	var retJson = {};
 	for(var i=0;i<workJson.length;i++){
 		var oneDay = workJson[i];
@@ -141,17 +151,28 @@ function dealWithJson(workJson){
 		if(!wkTimes || wkTimes.length!=2){
 			continue;
 		}
+		var morningTime = new Date(oneDay.start+" 12:00:00");
+		var afternoonTime = new Date(oneDay.start+" 13:00:00");
 		oneDay.from = new Date(oneDay.start+" "+wkTimes[0]);
 		oneDay.to = new Date(oneDay.start+" "+wkTimes[1]);
 		if(oneDay.to-oneDay.from<0){
 			oneDay.to = new Date(oneDay.to.setDate(oneDay.to.getDate()+1));
 		}
-		oneDay.stepMinutes = (oneDay.to - oneDay.from)/(1000*60);
-		if(new Date(oneDay.start+" 12:00:00")>oneDay.from){
-			oneDay.stepMinutes -= 60;
+		//计算上午工时
+		if( oneDay.from<morningTime ){
+			if(oneDay.to<morningTime){
+				oneDay.stepMinutes = (oneDay.to - oneDay.from)/(1000*60);
+			}else{
+				oneDay.stepMinutes = (morningTime - oneDay.from)/(1000*60);
+			}
 		}
-		else if(new Date(oneDay.start+" 13:00:00")>oneDay.from){
-			oneDay.stepMinutes -= (new Date(oneDay.start+" 13:00:00")-oneDay.from);
+		//计算下午工时
+		if( oneDay.to>afternoonTime ){
+			if(oneDay.from>afternoonTime){
+				oneDay.stepMinutes += (oneDay.to - oneDay.from)/(1000*60);
+			}else{
+				oneDay.stepMinutes += (oneDay.to - afternoonTime)/(1000*60);
+			}
 		}
 		if(oneDay.from.getDay()==0 || oneDay.from.getDay()==6){
 			continue;
