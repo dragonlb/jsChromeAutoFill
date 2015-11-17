@@ -1,4 +1,10 @@
+/**
 document.addEventListener('DOMContentLoaded', function () {
+    initActions();
+});
+ */
+$().ready(function(){
+    console.log("initActions");
     initActions();
 });
 

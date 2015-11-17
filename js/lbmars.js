@@ -88,6 +88,17 @@ function calcWorkTime(){
 	var nowDate = new Date();
 	var theMonth = window.prompt("请输入工时月份",nowDate.getMonth()+1);
 	try{
+		if(!theMonth || theMonth=="")	throw theMonth;
+		var intMonth = parseInt(theMonth);
+		if(!intMonth || intMonth<0 || intMonth>12){
+			throw "月份[ "+theMonth+" ]非法";
+		}
+		theMonth = intMonth;
+	}catch(e){
+		console.log("你未输入有效的月份 "+e);
+		return;
+	}
+	try{
 		var fdStart = new Date(nowDate.setMonth(theMonth-2));
 		fdStart = new Date(fdStart.setDate(26));
 		fdStart = new Date(fdStart.setHours(0));
@@ -129,7 +140,7 @@ function calcWorkTime(){
 				}
 				console.log((++dayOfMonth)+"\t"+"周"+weekDays[oneDay.getDay()]+"\t\t"+dayKey+"\t应工作 480 分钟，实际工作 "+actualMinutesSt+"\t分钟，差异分钟数:\t[ "+lessMinutesSt+" ]\t\t"+actualTimes);
 			}
-			console.log("-------------------------------------- 统计 --------------------------------------");
+			console.log("------------------------------------------------- 统计 -------------------------------------------------");
 			var lessOfMinutes = actualAll-companyAll;
 			var lessOfHours = parseInt(lessOfMinutes/60)%8;
 			var lessOfDays = parseInt(lessOfMinutes/480);
