@@ -162,13 +162,30 @@ function dealWithJson(workJson){
 		if(!wkTimes || wkTimes.length!=2){
 			continue;
 		}
+		try{
+			var wkTypeSt = "补打卡:";
+			if(wkTimes[0].indexOf(wkTypeSt)>=0){
+				oneDay.wkType = wkTypeSt;
+				wkTimes[0] = wkTimes[0].substring(wkTimes[0].indexOf(wkTypeSt)+wkTypeSt.length, wkTimes[0].length);
+			}
+			else{
+				wkTypeSt = "加班:";
+				if(wkTimes[0].indexOf(wkTypeSt)>=0){
+					oneDay.wkType = wkTypeSt;
+					wkTimes[0] = wkTimes[0].substring(wkTimes[0].indexOf(wkTypeSt)+wkTypeSt.length, wkTimes[0].length);
+				}
+			}
+			oneDay.from = new Date(oneDay.start+" "+wkTimes[0]);
+			oneDay.to = new Date(oneDay.start+" "+wkTimes[1]);
+		}catch(Ex){
+			continue;
+		}
 		var morningTime = new Date(oneDay.start+" 12:00:00");
 		var afternoonTime = new Date(oneDay.start+" 13:00:00");
-		oneDay.from = new Date(oneDay.start+" "+wkTimes[0]);
-		oneDay.to = new Date(oneDay.start+" "+wkTimes[1]);
 		if(oneDay.to-oneDay.from<0){
 			oneDay.to = new Date(oneDay.to.setDate(oneDay.to.getDate()+1));
 		}
+		oneDay.stepMinutes = 0;
 		//计算上午工时
 		if( oneDay.from<morningTime ){
 			if(oneDay.to<morningTime){
