@@ -175,6 +175,9 @@ function dealWithJson(workJson){
 					wkTimes[0] = wkTimes[0].substring(wkTimes[0].indexOf(wkTypeSt)+wkTypeSt.length, wkTimes[0].length);
 				}
 			}
+			if($.trim(wkTimes[0]).length==0|| $.trim(wkTimes[1]).length==0 ){
+				continue;
+			}
 			oneDay.from = new Date(oneDay.start+" "+wkTimes[0]);
 			oneDay.to = new Date(oneDay.start+" "+wkTimes[1]);
 		}catch(Ex){
