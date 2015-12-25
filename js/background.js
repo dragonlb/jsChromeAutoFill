@@ -28,7 +28,7 @@ function initActions() {
         chrome.tabs.executeScript(null, {code: "lvmamaAddBGDiv();", allFrames: true});
     });
     $("#_calcWorkTime")[0].addEventListener("click", function (e) {
-        chrome.tabs.executeScript(null, {code: "calcWorkTime();", allFrames: true});
+        chrome.tabs.executeScript(null, {code: "lvmamaWkTime.calcWorkTime();", allFrames: true});
     });
 }
 
@@ -43,6 +43,7 @@ chrome.tabs.onSelectionChanged.addListener(function (tabId, selectInfo) {
 function initialize(tabId) {
     chrome.tabs.executeScript(tabId, {file: "js/jquery-1.9.1.min.js", allFrames: true});
     chrome.tabs.executeScript(tabId, {file: "js/lbmars.js", allFrames: true});
+    chrome.tabs.executeScript(tabId, {file: "js/lvmamaWkTime.js", allFrames: true});
 }
 
 chrome.extension.onRequest.addListener(
