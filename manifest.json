@@ -1,9 +1,10 @@
 {  
   "manifest_version": 2,
-  "name": "LbAutoCommit",
-  "version": "1.0",
+  "name": "LbAutoCommit author: 李兵",
+  "version": "2.0",
   "description": "Automatic doing.",
-  "background": { "scripts": ["js/jquery-1.9.1.min.js", "js/background.js"] },
+  "background": {
+    "page":"background.html"},
   "permissions": [
     "tabs",
     "http://*/*",
@@ -21,7 +22,8 @@
   "content_scripts": [
     {
       "matches": ["http://*/*"],
-      "js": ["js/jquery-1.9.1.min.js", "js/lbmars.js"],
+      "js": ["js/jquery-1.9.1.min.js", "js/lbmars.js", "js/lvmamaWkTime.js"],
+      "css": ["css/lvmamaStyle.css"],
       "run_at": "document_start"
     }
   ]

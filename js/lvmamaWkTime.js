@@ -172,6 +172,9 @@ lvmamaWkTime.isSameDay = function(pDay, freeDaySt){
 lvmamaWkTime.isSameDay_noYear = function(pDay, freeDaySt){
     var pDaySt = "";
     pDaySt += (pDay.getMonth()+1)<10?('0'+(pDay.getMonth()+1)):(pDay.getMonth()+1);
-    pDaySt += pDay.getDate();
+    pDaySt += pDay.getDate()<10?('0'+pDay.getDate()):pDay.getDate();
     return pDaySt==freeDaySt;
+}
+lvmamaWkTime.showResult = function(){
+
 }

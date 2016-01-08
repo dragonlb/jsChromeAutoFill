@@ -6,13 +6,6 @@ function hello(name){
 	if(name)	vName = name;
 	console.log("Do you know me?\t"+vName);
 }
-function switchLight(lightAction){
-    if(lightAction == 'off'){
-        document.body.style.backgroundColor='#000';
-    } else {
-        document.body.style.backgroundColor='#fff';
-    }
-}
 function autoDeal(){
 	var cnNames = ["张三","李四","王二","钱五","张三一","李四二","王二二","钱五二","张三三","李四三","王二三","钱五三"];
 	var enNames1 = ["zhan","li","wang","qian","zhan2","li2","wang2","qian2","zhan3","li3","wang3","qian3"];
@@ -83,3 +76,9 @@ function lvmamaDoSelect(dom){
 	xzcpBtnClick(dom);
 }
 
+function testBtn(){
+	console.log(window.location.href);
+	var wkDiv = $('<div id="_lbWkDiv" class="lvmama_wkTime"></div>');
+	wkDiv.html("中华人民共和国");
+	$("body").append(wkDiv);
+}

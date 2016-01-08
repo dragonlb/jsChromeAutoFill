@@ -1,0 +1,14 @@
+
+.lvmama_wkTime{
+    position: absolute;
+    float: left;
+    top: 10px;
+    left: 20px;
+    background-color: antiquewhite;
+    width: 30%;
+    height: 100px;
+    opacity: 0.8;
+    border-style: groove;
+    border-color: gainsboro;
+    border-width: thin;
+}
