@@ -54,7 +54,7 @@ var lvmamaWkTime = {
             console.log("异常打卡("+pResult.expDays.length+")天：[ "+exprDaysSt+" ]");
         }
 
-        var wkDiv = $('<div id="_lbWkDiv" class="lvmama_wkTime"></div>');
+        var wkDiv = $("#_lbWkDiv").html("");
         var wkUl = $('<ul class="lvmama_wkUl"></ul>');
         wkUl.append($("<li></li>").html("统计区间：["+pResult.wkStart+" 至 "+pResult.wkEnd+"]"));
         wkUl.append($("<li></li>").html("实际工作：[ "+pResult.actualAllSt+" ]"));
@@ -83,6 +83,7 @@ lvmamaWkTime.calcWorkTime = function(){
         return;
     }
     try{
+        lvmamaWkTime.loadingWkTimes();
         var fdStart = new Date(nowDate.setMonth(theMonth-2));
         fdStart = new Date(fdStart.setDate(26));
         fdStart = new Date(fdStart.setHours(0));
@@ -255,8 +256,30 @@ lvmamaWkTime.isYesterdayOrBefore = function(pDay){
     nDaySt += nowDay.getDate();
     return parseInt(pDaySt)<parseInt(nDaySt);
 }
-lvmamaWkTime.showResult = function(pResult){
+lvmamaWkTime.loadingWkTimes = function(){
     var wkDiv = $('<div id="_lbWkDiv" class="lvmama_wkTime"></div>');
-    wkDiv.html("中华人民共和国");
+    var contentHtml = "";
+    contentHtml += '<div class="spinner">' +
+        '<div class="spinner-container container1">' +
+        '<div class="circle1"></div>' +
+        '<div class="circle2"></div>' +
+        '<div class="circle3"></div>' +
+        '<div class="circle4"></div>' +
+        '</div>' +
+        '<div class="spinner-container container2">' +
+        '<div class="circle1"></div>' +
+        '<div class="circle2"></div>' +
+        '<div class="circle3"></div>' +
+        '<div class="circle4"></div>' +
+        '</div>' +
+        '<div class="spinner-container container3">' +
+        '<div class="circle1"></div>' +
+        '<div class="circle2"></div>' +
+        '<div class="circle3"></div>' +
+        '<div class="circle4"></div>' +
+        '</div>' +
+        '</div>';
+    wkDiv.html(contentHtml);
     $("body").append(wkDiv);
+    $("body").unbind("click").bind("click", function(){$("#_lbWkDiv").remove();})
 }
