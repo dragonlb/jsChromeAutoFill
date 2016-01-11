@@ -1,7 +1,72 @@
 /**
  * Created by libing on 2015/12/25.
  */
-var lvmamaWkTime = {};
+var lvmamaWkTime = {
+    createMathResult : function(){
+        return {
+            wkStart: "",
+            wkEnd:"",
+            expDays:[],         //截止当前--异常打卡日
+            companyAll:0,       //总--标准工作分钟数
+            actualAll:0,        //总--实际工作分钟数
+            companyAllSt:"",    //总--标准工时
+            lessWkAllSt: "",    //总--差异工时
+            companyNow:0,       //截止当前--标准工作分钟数
+            companyNowSt:"",    //截止当前--标准工时
+            lessWkNowSt: "",    //截止当前--差异工时
+            actualAllSt:""      //实际工时
+        }
+    },
+    mathMinutes: function(pResult){
+        var vMinutes = pResult.actualAll-pResult.companyAll;
+        var vHours = parseInt(vMinutes/60)%8;
+        var vDays = parseInt(vMinutes/480);
+        //pResult.lessWkAllSt = ""+(vDays==0?"":(vDays+" 天, "))+(vHours==0?"":(vHours+" 小时, "))+(vMinutes%60)+" 分钟";
+        pResult.lessWkAllSt = ""+vDays+" 天, "+vHours+" 小时, "+(vMinutes%60)+" 分钟";
+
+        vMinutes = pResult.actualAll-pResult.companyNow;
+        vHours = parseInt(vMinutes/60)%8;
+        vDays = parseInt(vMinutes/480);
+        //pResult.lessWkNowSt = ""+(vDays==0?"":(vDays+" 天, "))+(vHours==0?"":(vHours+" 小时, "))+(vMinutes%60)+" 分钟";
+        pResult.lessWkNowSt = ""+vDays+" 天, "+vHours+" 小时, "+(vMinutes%60)+" 分钟";
+
+        vMinutes = pResult.actualAll;
+        vHours = parseInt(vMinutes/60)%8;
+        vDays = parseInt(vMinutes/480);
+        //pResult.actualAllSt = ""+(vDays==0?"":(vDays+" 天, "))+(vHours==0?"":(vHours+" 小时, "))+(vMinutes%60)+" 分钟";
+        pResult.actualAllSt = ""+vDays+" 天, "+vHours+" 小时, "+(vMinutes%60)+" 分钟";
+
+        pResult.companyAllSt = parseInt(pResult.companyAll/480) + " 天";
+        pResult.companyNowSt = (parseInt(pResult.companyNow/480)<10?"0":"")+parseInt(pResult.companyNow/480) + " 天";
+        return pResult;
+    },
+    showMathResult: function(pResult){
+        lvmamaWkTime.mathMinutes(pResult);
+        console.log("["+pResult.wkStart+" 至 "+pResult.wkEnd+"]区间应工作 "+pResult.companyAll+" 分钟");
+        console.log("当月应工作天数："+pResult.companyAllSt+"\t\t截止目前应工作天数："+pResult.companyNowSt);
+        console.log("实际工作：[ "+pResult.actualAllSt+" ]");
+        console.log("差异工时：[ "+pResult.lessWkAllSt+" ]");
+        var exprDaysSt = "";
+        if(pResult.expDays.length>0){
+            for(var i=0;i<pResult.expDays.length;i++){
+                exprDaysSt += (exprDaysSt.length<=0?"":", ")+pResult.expDays[i];
+            }
+            console.log("异常打卡("+pResult.expDays.length+")天：[ "+exprDaysSt+" ]");
+        }
+
+        var wkDiv = $('<div id="_lbWkDiv" class="lvmama_wkTime"></div>');
+        var wkUl = $('<ul class="lvmama_wkUl"></ul>');
+        wkUl.append($("<li></li>").html("统计区间：["+pResult.wkStart+" 至 "+pResult.wkEnd+"]"));
+        wkUl.append($("<li></li>").html("实际工作：[ "+pResult.actualAllSt+" ]"));
+        wkUl.append($("<li></li>").html("<span class='lvmama_less0'>截止当前--统计："+pResult.companyNowSt+"</span><span class='lvmama_less'>差异工时："+pResult.lessWkNowSt+"</span>"));
+        wkUl.append($("<li></li>").html("<span class='lvmama_less0'>当月总共--统计："+pResult.companyAllSt+"</span><span class='lvmama_less'>差异工时："+pResult.lessWkAllSt+"</span>"));
+        if(exprDaysSt!=""){
+            wkUl.append($("<li></li>").html("异常打卡("+pResult.expDays.length+")天：[ "+exprDaysSt+" ]"));
+        }
+        wkDiv.append(wkUl);
+        $("body").append(wkDiv);
+    }
+};
 lvmamaWkTime.calcWorkTime = function(){
     var weekDays = ['天', '一', '二', '三', '四', '五', '六'];
     var nowDate = new Date();
@@ -33,22 +98,30 @@ lvmamaWkTime.calcWorkTime = function(){
             fdEnd: fdEnd.getFullYear()+"-"+(fdEnd.getMonth()+1)+"-"+fdEnd.getDate()+' 00:00'
         };
         console.log(pData);
+        var mathResult= lvmamaWkTime.createMathResult();
+        mathResult.wkStart = pData.fdStart;
+        mathResult.wkEnd = pData.fdEnd;
         $.getJSON(url, pData, function(jsonData){
-            var companyAll = 0, actualAll = 0;
             var workDays = lvmamaWkTime.dealWithJson(jsonData);
             for(var oneDay = new Date(fdStart),dayOfMonth=0;oneDay<fdEnd; oneDay=new Date(oneDay.setDate(oneDay.getDate()+1))){
                 if(lvmamaWkTime.isFreeDay(oneDay)){
                     continue;
                 }
+                mathResult.companyAll += 480;
                 var dayKey = oneDay.getFullYear()+"-"+(oneDay.getMonth()+1)+"-"+oneDay.getDate();
                 var actualMinutes = 0;
                 var actualTimes = "";
                 if(workDays[dayKey]){
-                    actualMinutes = workDays[dayKey].stepMinutes
+                    actualMinutes = workDays[dayKey].stepMinutes;
                     actualTimes = workDays[dayKey].title;
+                    mathResult.actualAll += actualMinutes;
                 }
-                companyAll += 480;
-                actualAll += actualMinutes;
+                if(lvmamaWkTime.isYesterdayOrBefore(oneDay)){
+                    mathResult.companyNow += 480;
+                    if(!workDays[dayKey] || !workDays[dayKey].stepMinutes || workDays[dayKey].stepMinutes<=0){
+                        mathResult.expDays.push(dayKey);
+                    }
+                }
                 var actualMinutesSt = actualMinutes.toString();
                 for(var i=actualMinutesSt.length;i<=3;i++){
                     actualMinutesSt = " "+actualMinutesSt;
@@ -60,10 +133,7 @@ lvmamaWkTime.calcWorkTime = function(){
                 console.log((++dayOfMonth)+"\t"+"周"+weekDays[oneDay.getDay()]+"\t\t"+dayKey+"\t应工作 480 分钟，实际工作 "+actualMinutesSt+"\t分钟，差异分钟数:\t[ "+lessMinutesSt+" ]\t\t"+actualTimes);
             }
             console.log("------------------------------------------------- 统计 -------------------------------------------------");
-            var lessOfMinutes = actualAll-companyAll;
-            var lessOfHours = parseInt(lessOfMinutes/60)%8;
-            var lessOfDays = parseInt(lessOfMinutes/480);
-            console.log("["+pData.fdStart+" 至 "+pData.fdEnd+"]区间应工作 "+companyAll+" 分钟，实际工作 "+actualAll+" 分钟，差异分钟数：[ "+(actualAll-companyAll)+" ],即 [  "+lessOfDays+" 天, "+lessOfHours+" 小时, "+(lessOfMinutes%60)+" 分钟 ]");
+            lvmamaWkTime.showMathResult(mathResult);
         });
     }catch(e){
         alert("输入的 JSON 不合法!"+e);
@@ -175,6 +245,18 @@ lvmamaWkTime.isSameDay_noYear = function(pDay, freeDaySt){
     pDaySt += pDay.getDate()<10?('0'+pDay.getDate()):pDay.getDate();
     return pDaySt==freeDaySt;
 }
-lvmamaWkTime.showResult = function(){
-
+lvmamaWkTime.isYesterdayOrBefore = function(pDay){
+    var pDaySt = pDay.getFullYear();
+    pDaySt += (pDay.getMonth()+1)<10?('0'+(pDay.getMonth()+1)):(pDay.getMonth()+1);
+    pDaySt += pDay.getDate();
+    var nowDay = new Date();
+    var nDaySt = nowDay.getFullYear();
+    nDaySt += (nowDay.getMonth()+1)<10?('0'+(nowDay.getMonth()+1)):(nowDay.getMonth()+1);
+    nDaySt += nowDay.getDate();
+    return parseInt(pDaySt)<parseInt(nDaySt);
+}
+lvmamaWkTime.showResult = function(pResult){
+    var wkDiv = $('<div id="_lbWkDiv" class="lvmama_wkTime"></div>');
+    wkDiv.html("中华人民共和国");
+    $("body").append(wkDiv);
 }

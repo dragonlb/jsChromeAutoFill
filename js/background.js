@@ -9,7 +9,7 @@ $().ready(function(){
         chrome.tabs.executeScript(null, {code: "document.body.style.backgroundColor='#000';", allFrames:true});
     });
     $("#_tsHello").click(function(){
-        var notification = new Notification("中华人民共和国1");
+        var notification = new Notification("中华人民共和国1",{body:"中华人民共和国2", icon:"img/alien.png", tag:""});
         notification.show();
     });
     $("#_autoComplete").click(function(){

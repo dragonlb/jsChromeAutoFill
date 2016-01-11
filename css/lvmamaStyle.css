@@ -3,12 +3,27 @@
     position: absolute;
     float: left;
     top: 10px;
-    left: 20px;
+    left: auto;
+    right: 10px;
     background-color: antiquewhite;
-    width: 30%;
-    height: 100px;
-    opacity: 0.8;
+    width: 35em;
+    height: 7em;
+    opacity: 0.7;
     border-style: groove;
     border-color: gainsboro;
     border-width: thin;
+    font-size: 1.2em;
+    font-family: "Microsoft YaHei" ! important;
+    color:darkblue;
+    z-index:99;
+}
+
+.lvmama_wkUl {
+    margin: 10px 0 0 30px;
+    list-style:none;
+}
+.lvmama_less0 {
+}
+.lvmama_less {
+    margin-left: 4em;
 }
