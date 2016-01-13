@@ -70,6 +70,11 @@ var lvmamaWkTime = {
 lvmamaWkTime.calcWorkTime = function(){
     var weekDays = ['天', '一', '二', '三', '四', '五', '六'];
     var nowDate = new Date();
+    var perMitUrl = "http://ekp.joyu.com";
+    if(window.location.href.indexOf(perMitUrl)!=0){
+        alert("请先登陆 "+perMitUrl+" ,再使用此插件。");
+        return;
+    }
     var theMonth = window.prompt("请输入工时月份",nowDate.getMonth()+1);
     try{
         if(!theMonth || theMonth=="")	throw theMonth;
