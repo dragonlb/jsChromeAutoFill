@@ -23,7 +23,7 @@
     {
       "matches": ["http://*/*"],
       "js": ["js/jquery-1.9.1.min.js", "js/lbmars.js", "js/lvmamaWkTime.js"],
-      "css": ["css/lvmamaStyle.css"],
+      "css": ["css/lvmamaStyle.css", "css/bootstrap.min.css", "css/bs/grid.css"],
       "run_at": "document_start"
     }
   ]

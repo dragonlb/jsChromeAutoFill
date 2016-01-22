@@ -10,9 +10,18 @@ var lvmamaWkTime = {
             companyAll:0,       //总--标准工作分钟数
             actualAll:0,        //总--实际工作分钟数
             companyAllSt:"",    //总--标准工时
+            lessWkAll_d:0,
+            lessWkAll_h:0,
+            lessWkAll_m:0,
             lessWkAllSt: "",    //总--差异工时
             companyNow:0,       //截止当前--标准工作分钟数
+            companyNow_d:0,
+            companyNow_h:0,
+            companyNow_m:0,
             companyNowSt:"",    //截止当前--标准工时
+            lessWkNow_d:0,
+            lessWkNow_h:0,
+            lessWkNow_m:0,
             lessWkNowSt: "",    //截止当前--差异工时
             actualAllSt:""      //实际工时
         }
@@ -22,48 +31,73 @@ var lvmamaWkTime = {
         var vHours = parseInt(vMinutes/60)%8;
         var vDays = parseInt(vMinutes/480);
         //pResult.lessWkAllSt = ""+(vDays==0?"":(vDays+" 天, "))+(vHours==0?"":(vHours+" 小时, "))+(vMinutes%60)+" 分钟";
+        pResult.lessWkAll_d=vDays;pResult.lessWkAll_h=vHours,pResult.lessWkAll_m=(vMinutes%60);
         pResult.lessWkAllSt = ""+vDays+" 天, "+vHours+" 小时, "+(vMinutes%60)+" 分钟";
 
         vMinutes = pResult.actualAll-pResult.companyNow;
         vHours = parseInt(vMinutes/60)%8;
         vDays = parseInt(vMinutes/480);
         //pResult.lessWkNowSt = ""+(vDays==0?"":(vDays+" 天, "))+(vHours==0?"":(vHours+" 小时, "))+(vMinutes%60)+" 分钟";
+        pResult.lessWkNow_d=vDays;pResult.lessWkNow_h=vHours,pResult.lessWkNow_m=(vMinutes%60);
         pResult.lessWkNowSt = ""+vDays+" 天, "+vHours+" 小时, "+(vMinutes%60)+" 分钟";
 
         vMinutes = pResult.actualAll;
         vHours = parseInt(vMinutes/60)%8;
         vDays = parseInt(vMinutes/480);
         //pResult.actualAllSt = ""+(vDays==0?"":(vDays+" 天, "))+(vHours==0?"":(vHours+" 小时, "))+(vMinutes%60)+" 分钟";
+        pResult.actualAll_d=vDays;pResult.actualAll_h=vHours,pResult.actualAll_m=(vMinutes%60);
         pResult.actualAllSt = ""+vDays+" 天, "+vHours+" 小时, "+(vMinutes%60)+" 分钟";
 
-        pResult.companyAllSt = parseInt(pResult.companyAll/480) + " 天";
-        pResult.companyNowSt = (parseInt(pResult.companyNow/480)<10?"0":"")+parseInt(pResult.companyNow/480) + " 天";
+        pResult.companyAllSt = parseInt(pResult.companyAll/480);
+        pResult.companyNowSt = (parseInt(pResult.companyNow/480)<10?"0":"")+parseInt(pResult.companyNow/480);
         return pResult;
     },
     showMathResult: function(pResult){
         lvmamaWkTime.mathMinutes(pResult);
         console.log("["+pResult.wkStart+" 至 "+pResult.wkEnd+"]区间应工作 "+pResult.companyAll+" 分钟");
-        console.log("当月应工作天数："+pResult.companyAllSt+"\t\t截止目前应工作天数："+pResult.companyNowSt);
+        console.log("当月应工作天数："+pResult.companyAllSt+" 天\t\t截止目前应工作天数："+pResult.companyNowSt+" 天");
         console.log("实际工作：[ "+pResult.actualAllSt+" ]");
         console.log("差异工时：[ "+pResult.lessWkAllSt+" ]");
-        var exprDaysSt = "";
+        var exprDaysSt = "";var exprDaysSt2 = "";
         if(pResult.expDays.length>0){
             for(var i=0;i<pResult.expDays.length;i++){
                 exprDaysSt += (exprDaysSt.length<=0?"":", ")+pResult.expDays[i];
+                exprDaysSt2 += (exprDaysSt2.length<=0?"":", ")+'<span class="label label-warning">'+pResult.expDays[i]+'</span>';
             }
             console.log("异常打卡("+pResult.expDays.length+")天：[ "+exprDaysSt+" ]");
         }
 
         var wkDiv = $("#_lbWkDiv").html("");
-        var wkUl = $('<ul class="lvmama_wkUl"></ul>');
-        wkUl.append($("<li></li>").html("统计区间：["+pResult.wkStart+" 至 "+pResult.wkEnd+"]"));
-        wkUl.append($("<li></li>").html("实际工作：[ "+pResult.actualAllSt+" ]"));
-        wkUl.append($("<li></li>").html("<span class='lvmama_less0'>截止当前--统计："+pResult.companyNowSt+"</span><span class='lvmama_less'>差异工时："+pResult.lessWkNowSt+"</span>"));
-        wkUl.append($("<li></li>").html("<span class='lvmama_less0'>当月总共--统计："+pResult.companyAllSt+"</span><span class='lvmama_less'>差异工时："+pResult.lessWkAllSt+"</span>"));
-        if(exprDaysSt!=""){
-            wkUl.append($("<li></li>").html("异常打卡("+pResult.expDays.length+")天：[ "+exprDaysSt+" ]"));
-        }
-        wkDiv.append(wkUl);
+        //var wkUl = $('<ul></ul>');
+        //wkUl.append($("<div class='row bg-primary'></div>").html("统计区间：["+pResult.wkStart+" 至 "+pResult.wkEnd+"]"));
+        //wkUl.append($("<li></li>").html("实际工作：[ "+pResult.actualAllSt+" ]"));
+        //wkUl.append($("<li></li>").html("<span class='lvmama_less0'>截止当前--统计："+pResult.companyNowSt+"</span><span class='lvmama_less'>差异工时："+pResult.lessWkNowSt+"</span>"));
+        //wkUl.append($("<li></li>").html("<span class='lvmama_less0'>当月总共--统计："+pResult.companyAllSt+"</span><span class='lvmama_less'>差异工时："+pResult.lessWkAllSt+"</span>"));
+        //if(exprDaysSt!=""){
+        //    wkUl.append($("<li></li>").html("异常打卡("+pResult.expDays.length+")天：[ "+exprDaysSt+" ]"));
+        //}
+        var contentHtml = "";
+        contentHtml+= '<div>'+
+            '<div class="row bg-primary">'+
+            '<div class="col-md-12">统计区间：['+pResult.wkStart+' 至 '+pResult.wkEnd+']</div>'+
+            '</div>'+
+            '<div class="row">'+
+            '<div class="col-md-12">实际工作：<span class="badge">'+pResult.actualAll_d+'</span> 天, <span class="badge">'+pResult.actualAll_h+'</span> 小时, <span class="badge">'+pResult.actualAll_m+'</span> 分钟</div>'+
+            '</div>'+
+            '<div class="row">'+
+            '<div class="col-md-6">截止当前--统计：<span class="badge">'+pResult.companyNowSt+'</span> 天</div>'+
+            '<div class="col-md-6">差异工时：<span class="badge">'+pResult.lessWkNow_d+'</span> 天, <span class="badge">'+pResult.lessWkNow_h+'</span> 小时, <span class="badge">'+pResult.lessWkNow_m+'</span> 分钟</div>'+
+            '</div>'+
+            '<div class="row">'+
+            '<div class="col-md-6">当月总共--统计：<span class="badge">'+pResult.companyAllSt+'</span> 天</div>'+
+            '<div class="col-md-6">差异工时：<span class="badge">'+pResult.lessWkAll_d+'</span> 天, <span class="badge">'+pResult.lessWkAll_h+'</span> 小时, <span class="badge">'+pResult.lessWkAll_m+'</span> 分钟</div>'+
+            '</div>'+
+            '<div class="row bg-danger">'+
+            '<div class="col-md-12">异常打卡<span class="badge">'+pResult.expDays.length+'</span>天：[ '+exprDaysSt2+' ]</div>'+
+            '</div>'+
+            '</div>';
+        //wkDiv.append(wkUl);
+        wkDiv.html(contentHtml);
         $("body").append(wkDiv);
     }
 };
