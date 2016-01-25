@@ -18,6 +18,9 @@ $().ready(function(){
     $("#_calcWorkTime").click(function(){
         chrome.tabs.executeScript(null, {code: "lvmamaWkTime.calcWorkTime();"});
     });
+    $("#_openChatTab").click(function(){
+        chrome.tabs.create({'url': 'html/chat_tab.html'});
+    });
 });
 
 chrome.tabs.onCreated.addListener(function (tabId, changeInfo, tab) {

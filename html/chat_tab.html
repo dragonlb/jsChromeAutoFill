@@ -1,0 +1,41 @@
+<html>
+<body>
+<head>
+    <script>
+        function sendChatMsg() {
+            var msgNode = document.getElementById("chat_msg");
+            if (msgNode.value == "") {
+                return;
+            }
+            chrome.windows.getCurrent(function (wnd) {
+                chrome.tabs.getAllInWindow(wnd.id, function (tabs) {
+                    for (var i = 0; i < tabs.length; i++) {
+                        if (tabs[i].url == "http://www.baidu.com") {
+                            chrome.tabs.sendRequest(tabs[i].id, {msg: msgNode.value});
+                            msgNode.value = "";
+                        }
+                    }
+                });
+            });
+            contentNode = document.getElementById("chat_content");
+            contentNode.value = contentNode.value + "我说:" + msgNode.value + "/r/n";
+            contentNode.scrollTop = contentNode.scrollHeight;
+        }
+        chrome.extension.onRequest.addListener(
+                function (data) {
+                    contentNode = document.getElementById("chat_content");
+                    contentNode.value = contentNode.value + "google说:" + data.msg + "/r/n";
+                    contentNode.scrollTop = contentNode.scrollHeight;
+                }
+        );
+    </script>
+<head>
+    <div>
+        <textarea id="chat_content" ROWS="8" COLS="50"></textarea>
+        <div>
+            <input id="chat_msg" type="text" SIZE="46"/>
+            <input type="button" value="发送" onclick="sendChatMsg()"/>
+        </div>
+    </div>
+</body>
+</html>

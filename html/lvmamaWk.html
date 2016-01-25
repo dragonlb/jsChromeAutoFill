@@ -2,16 +2,64 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>驴妈妈</title>
-    <link charset="utf-8" rel="stylesheet" href="../css/lvmamaStyle.css">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/lvmamaStyle.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bs/grid.css" rel="stylesheet">
 </head>
 <body>
-<div id="_lbWk">
-    <ul>
-        <li><span>工作月份</span><span>1</span></li>
-        <li><span>应工作时间--当前</span><span><em>4900<em>小时</em></em></span></li>
-        <li><span>应工作时间--总</span><span><em>4900<em>小时</em></em></span></li>
-    </ul>
+<div class="lvmama_wkTime">
+    <div>
+    <div class="row bg-primary">
+        <div class="col-md-4">.col-md-4</div>
+        <div class="col-md-8">.col-md-8<span id="_joyuClose" type="button" class="glyphicon glyphicon-resize-small" aria-hidden="true" style="cursor:pointer;float:right;"></span></div>
+    </div>
+    <div class="row" autoDisplay="need">
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+        <div class="col-md-1">.col-md-1</div>
+    </div>
+    <div class="row" autoDisplay="need">
+        <div class="col-md-4">.col-md-4</div>
+        <div class="col-md-4">.col-md-4</div>
+        <div class="col-md-4">.col-md-4</div>
+    </div>
+    <div class="row" autoDisplay="need">
+        <div class="col-md-6">.col-md-6</div>
+        <div class="bg-info col-md-6">.col-md-6</div>
+    </div>
+    <div class="row" autoDisplay="need">
+        <div class="bg-info">.col-md-6</div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon-star"></span> Star
+            </button>
+        </div>
+    </div>
+    </div>
 </div>
+
+<script src="../js/jquery-1.9.1.min.js" ></script>
+<script src="../js/bootstrap.min.js"></script>
+<script>
+    $().ready(function(){
+        $("#_joyuClose").bind("click", function(){
+            $(this).toggleClass("glyphicon-resize-small");
+            $(this).toggleClass("glyphicon-resize-full");
+            $("[autoDisplay='need']").toggle("slow", "swing");
+            //$("#_lbWkDiv").remove();
+        })
+    });
+</script>
 </body>
 </html>

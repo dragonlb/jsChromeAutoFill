@@ -21,10 +21,20 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://ekp.joyu.com/*"],
-      "js": ["js/jquery-1.9.1.min.js", "js/lbmars.js", "js/lvmamaWkTime.js"],
-      "css": ["css/lvmamaStyle.css", "css/bootstrap.min.css", "css/bs/grid.css"],
+      "matches": ["http://*/*"],
+      "js": ["js/jquery-1.9.1.min.js"],
       "run_at": "document_start"
+    },
+    {
+      "matches": ["http://ekp.joyu.com/*"],
+      "js": ["js/lbmars.js", "js/lvmamaWkTime.js"],
+      "css": ["css/lvmamaStyle.css", "css/bootstrap.min.css", "css/bs/grid.css"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [ "http://www.baidu.com/" ],
+      "js": [ "js/ts_chat.js" ],
+      "run_at": "document_end"
     }
   ]
 }

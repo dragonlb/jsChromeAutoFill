@@ -79,26 +79,37 @@ var lvmamaWkTime = {
         var contentHtml = "";
         contentHtml+= '<div>'+
             '<div class="row bg-primary">'+
-            '<div class="col-md-12">统计区间：['+pResult.wkStart+' 至 '+pResult.wkEnd+']</div>'+
+                '<div class="col-md-12">统计区间：['+pResult.wkStart+' 至 '+pResult.wkEnd+']' +
+                    '<span id="_joyuClose" type="button" aria-hidden="true" style="cursor:pointer;float:right;">X</span>'+
+                    '<span id="_joyuMin" type="button" class="glyphicon glyphicon-resize-small" aria-hidden="true" style="cursor:pointer;float:right;margin-right:1em;">__</span></div>' +
             '</div>'+
-            '<div class="row">'+
+            '<div class="row" autoDisplay="need">'+
             '<div class="col-md-12">实际工作：<span class="badge">'+pResult.actualAll_d+'</span> 天, <span class="badge">'+pResult.actualAll_h+'</span> 小时, <span class="badge">'+pResult.actualAll_m+'</span> 分钟</div>'+
             '</div>'+
-            '<div class="row">'+
+            '<div class="row" autoDisplay="need">'+
             '<div class="col-md-6">截止当前--统计：<span class="badge">'+pResult.companyNowSt+'</span> 天</div>'+
             '<div class="col-md-6">差异工时：<span class="badge">'+pResult.lessWkNow_d+'</span> 天, <span class="badge">'+pResult.lessWkNow_h+'</span> 小时, <span class="badge">'+pResult.lessWkNow_m+'</span> 分钟</div>'+
             '</div>'+
-            '<div class="row">'+
+            '<div class="row" autoDisplay="need">'+
             '<div class="col-md-6">当月总共--统计：<span class="badge">'+pResult.companyAllSt+'</span> 天</div>'+
             '<div class="col-md-6">差异工时：<span class="badge">'+pResult.lessWkAll_d+'</span> 天, <span class="badge">'+pResult.lessWkAll_h+'</span> 小时, <span class="badge">'+pResult.lessWkAll_m+'</span> 分钟</div>'+
             '</div>'+
-            '<div class="row bg-danger">'+
+            '<div class="row bg-danger" autoDisplay="need">'+
             '<div class="col-md-12">异常打卡<span class="badge">'+pResult.expDays.length+'</span>天：[ '+exprDaysSt2+' ]</div>'+
             '</div>'+
             '</div>';
         //wkDiv.append(wkUl);
-        wkDiv.html(contentHtml);
+        wkDiv.append($(contentHtml));
         $("body").append(wkDiv);
+        $("body").unbind("click");
+        $("#_joyuMin").bind("click", function(){
+            $(this).toggleClass("glyphicon-resize-small");
+            $(this).toggleClass("glyphicon-resize-full");
+            $("[autoDisplay='need']").toggle("slow", "swing");
+        });
+        $("#_joyuClose").bind("click", function(){
+            $("#_lbWkDiv").remove();
+        });
     }
 };
 lvmamaWkTime.calcWorkTime = function(){
