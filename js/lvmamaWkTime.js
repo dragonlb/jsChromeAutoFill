@@ -299,11 +299,11 @@ lvmamaWkTime.isSameDay_noYear = function(pDay, freeDaySt){
 lvmamaWkTime.isYesterdayOrBefore = function(pDay){
     var pDaySt = pDay.getFullYear();
     pDaySt += (pDay.getMonth()+1)<10?('0'+(pDay.getMonth()+1)):(pDay.getMonth()+1);
-    pDaySt += pDay.getDate();
+    pDaySt += pDay.getDate()<10?('0'+pDay.getDate()):pDay.getDate();
     var nowDay = new Date();
     var nDaySt = nowDay.getFullYear();
     nDaySt += (nowDay.getMonth()+1)<10?('0'+(nowDay.getMonth()+1)):(nowDay.getMonth()+1);
-    nDaySt += nowDay.getDate();
+    nDaySt += nowDay.getDate()<10?('0'+nowDay.getDate()):nowDay.getDate();
     return parseInt(pDaySt)<parseInt(nDaySt);
 }
 lvmamaWkTime.loadingWkTimes = function(){
