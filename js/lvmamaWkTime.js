@@ -153,6 +153,7 @@ lvmamaWkTime.calcWorkTime = function(){
         mathResult.wkStart = pData.fdStart;
         mathResult.wkEnd = pData.fdEnd;
         $.getJSON(url, pData, function(jsonData){
+            console.log(jsonData);
             var workDays = lvmamaWkTime.dealWithJson(jsonData);
             for(var oneDay = new Date(fdStart),dayOfMonth=0;oneDay<fdEnd; oneDay=new Date(oneDay.setDate(oneDay.getDate()+1))){
                 if(lvmamaWkTime.isFreeDay(oneDay)){
