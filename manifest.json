@@ -19,6 +19,7 @@
     "default_title": "Auto task",
     "default_popup": "popup.html"
   },
+  "icons":{"16":"img/alien.png","128":"img/alien.png","48":"img/alien.png","72":"img/alien.png"},
   "content_scripts": [
     {
       "matches": ["http://*/*"],
