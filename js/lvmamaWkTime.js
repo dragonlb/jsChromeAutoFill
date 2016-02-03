@@ -267,7 +267,13 @@ lvmamaWkTime.isFreeDay = function(pDay){
     if(!pDay || !(pDay instanceof Date) )   return false;
     var freeDays_noYear = ["0101", "0501", "1001", "1002", "1003", "1004", "1005", "1006", "1007"];
     var freeDays = ["20160207","20160208","20160209","20160210","20160211","20160212","20160213"];
+    var busyDays = ["20160206", "20160214"];
     try{
+        for(var i=0;i<busyDays.length;i++){
+            if(lvmamaWkTime.isSameDay(pDay, busyDays[i])){
+                return false;
+            }
+        }
         for(var i=0;i<freeDays.length;i++){
             if(lvmamaWkTime.isSameDay(pDay, freeDays[i])){
                 return true;
@@ -288,7 +294,7 @@ lvmamaWkTime.isFreeDay = function(pDay){
 lvmamaWkTime.isSameDay = function(pDay, freeDaySt){
     var pDaySt = pDay.getFullYear();
     pDaySt += (pDay.getMonth()+1)<10?('0'+(pDay.getMonth()+1)):(pDay.getMonth()+1);
-    pDaySt += pDay.getDate();
+    pDaySt += pDay.getDate()<10?('0'+pDay.getDate()):pDay.getDate();
     return pDaySt==freeDaySt;
 }
 lvmamaWkTime.isSameDay_noYear = function(pDay, freeDaySt){
