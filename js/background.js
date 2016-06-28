@@ -24,6 +24,10 @@ $().ready(function(){
     $("#_openChatTab").click(function(){
         chrome.tabs.create({'url': 'html/chat_tab.html'});
     });
+    $("#_openSQLConvert").click(function(){
+        chrome.tabs.create({'url': 'html/SQLFromCSV.html'});
+    });
+
 });
 
 chrome.tabs.onCreated.addListener(function (tabId, changeInfo, tab) {

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/default.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bs/grid.css" rel="stylesheet">
+</head>
+<body>
+<div class="default_content">
+    <div class="row bg-primary">
+        <div class="col-md-12">SQL 转换
+            <span id="_joyuClose" type="button" class="glyphicon glyphicon-resize-small" aria-hidden="true" style="cursor:pointer;float:right;"></span></div>
+    </div>
+    <div class="row" autoDisplay="need">
+        <div class="col-md-1">字段顺序</div>
+        <div class="col-md-11">
+            <textarea style="width:100%" id="columnIndex" ROWS="3" COLS="1"></textarea>
+        </div>
+    </div>
+    <div class="row" autoDisplay="need">
+        <div class="col-md-1">内容</div>
+        <div class="col-md-11">
+            <textarea style="width:100%" id="csvContent" ROWS="8" COLS="50"></textarea>
+        </div>
+    </div>
+    <div class="row" autoDisplay="need">
+        <div class="col-md-12" style="text-align:center">
+            <button type="button" class="btn btn-default btn-lg" id="genInsertSQL">
+                <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Star
+            </button>
+        </div>
+    </div>
+    <div class="row" autoDisplay="need">
+        <div class="col-md-1">SQL: insert</div>
+        <div class="col-md-11">
+            <textarea style="width:100%" id="insertSqls" ROWS="8" COLS="50"></textarea>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery-1.9.1.min.js" ></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/stringObj.js"></script>
+<script src="../js/SQLFromCSV.js"></script>
+</body>
+</html>
