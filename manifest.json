@@ -1,6 +1,6 @@
 {  
   "manifest_version": 2,
-  "name": "LbAutoCommit author: 李兵",
+  "name": "LbAutoCommit author: 李兵(丈八)",
   "version": "2.0",
   "description": "Automatic doing.",
   "background": {
@@ -27,14 +27,9 @@
       "run_at": "document_start"
     },
     {
-      "matches": ["http://ekp.joyu.com/*"],
-      "js": ["js/lvmamaWkTime.js"],
-      "css": ["css/lvmamaStyle.css", "css/bootstrap.min.css", "css/bs/grid.css"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": [ "http://www.baidu.com/" ],
-      "js": [ "js/ts_chat.js" ],
+      "matches": ["http://tfoscar.daily.taobao.net/*","http://pre.siff.taobao.com/*", "http://100.69.163.78/*"],
+      "js": ["js/alibaba_siff.js"],
+      "css": [],
       "run_at": "document_end"
     }
   ]

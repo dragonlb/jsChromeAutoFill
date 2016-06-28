@@ -24,6 +24,9 @@ $().ready(function(){
     $("#_openChatTab").click(function(){
         chrome.tabs.create({'url': 'html/chat_tab.html'});
     });
+    $("#_refreshPrint").click(function(){
+        chrome.tabs.executeScript(null, {code: "alibaba_siff.refreshPrint();"});
+    });
 });
 
 chrome.tabs.onCreated.addListener(function (tabId, changeInfo, tab) {
@@ -37,5 +40,5 @@ chrome.tabs.onCreated.addListener(function (tabId, changeInfo, tab) {
 function initialize(tabId) {
     chrome.tabs.executeScript(null, {file: "js/jquery-1.9.1.min.js"});
     chrome.tabs.executeScript(null, {file: "js/lbmars.js"});
-    chrome.tabs.executeScript(null, {file: "js/lvmamaWkTime.js"});
+    chrome.tabs.executeScript(null, {file: "js/alibaba_siff.js"});
 }
